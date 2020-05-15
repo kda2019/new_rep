@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="profile">
+    <div class="profile-photo-name">
+        {% if profile.photo %}
+        <img src="{{ profile.photo.url }}" class="profile-photo">
+        {% else %}
+        <img src="{% static 'images/no-photo.png' %}" class="profile-photo">
+        {% endif %}
+        <span class="profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+    </div>
+    <div class="profile-info">
+        <p>
+            <span>Status: student</span><br>
+            <a href="#" class="d_link">College of Computer Technology and Economics</a><br>
+            <a href="#" class="d_link">К-687-44</a> - Computer engineer<br><br>
+            <span>Birthday: 19.07.1911</span>
+        </p>
+    </div>
+</div>
+<div class="dashboard">
+    <div class="post">
+        <form method="POST" class="post_form" novalidate>
+        {% csrf_token %}
+        <div>
+        {% for field in post_form %}
+        <div class="form-group">
+            {{field.label_tag}}
+            <div>{{field}}</div>
+            {% if field.errors%}
+            {% for error in field.errors %}
+            <div class="alert alert-danger">
+                {{error}}
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% endfor %}
+        </div>
+        <input type="submit" value="Send" >
+    </form>
+    </div>
+    {% for post in posts%}
+    <div class="post">
+        <div class="post-title">
+            {% if profile.photo %}
+            <img src="{{ profile.photo.url }}" class="post-photo">
+            {% else %}
+            <img src="{% static 'images/no-photo.png' %}" class="post-photo">
+            {% endif %}
+            <p class="post-who">{{ request.user.get_full_name }}</p>
+            <p class="post-date">{{post.date}}</p>
+            <form action="{% url 'post_delete' post.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="delete" class="post_delete">
+            </form>
+        </div>
+        <div class="post-body">
+                {{ post.body|linebreaks }}
+        </div>
+        <div class="post-footer">
+            <img src="{% static 'images/like.png' %}" class="post-like">
+            <p>likes</p>
+            <img src="{% static 'images/comment.png' %}" class="post-comment">
+            <p>comments</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="events">
+    <p class="events-title">Events:</p>
+    <div class="event">
+        <img src="images/event.png" class="events-ico">
+        <span class="events-info">Написать 2 часть курсача</span>
+    </div>
+    <div class="event">
+        <img src="images/event.png" class="events-ico">
+        <span class="events-info">Написать 2 часть курсача</span>
+    </div>
+    <div class="event">
+        <img src="images/event.png" class="events-ico">
+        <span class="events-info">Написать 2 часть курсача</span>
+    </div>
+    <p class="events-more"><a href="#" class="d_link"> more..</a></p>
+</div>
+	<div class="owerlay-popup"></div>
+	<div class="events-popup">
+        <form action="{% url 'new_user_event' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="title">
+            <textarea name="text"></textarea>
+            <input type="date" name="date_event">
+            <input type="submit" value="Добавить">
+        </form>
+		<div class="events">
+			<p class="events-title">Events:</p>
+			<div class="event">
+				<img src="images/event.png" class="events-ico">
+				<span class="events-info">Написать 2 часть курсача</span>
+			</div>
+			<div class="event">
+				<img src="images/event.png" class="events-ico">
+				<span class="events-info">Написать 2 часть курсача</span>
+			</div>
+			<div class="event">
+				<img src="images/event.png" class="events-ico">
+				<span class="events-info">Написать 2 часть курсача</span>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+

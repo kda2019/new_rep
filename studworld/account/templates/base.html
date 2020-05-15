@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+     <link href="{% static 'css/base.css' %}" rel="stylesheet">
+</head>
+<body>
+    <header>
+        {% if request.user.is_authenticated %}
+        <div class="logo">
+            <span class="span">Studworld</span>
+        </div>
+        <ul class="topul">
+            <li class="topli_search">
+                <a href="#"><img src="{% static 'images/search.png' %}" class="search_logo"></a>
+                <a href="#" class="sp_href"><span>Search</span></a>
+            </li>
+            <li class="topli">
+                <a href="{% url 'edit' %}"><img src="{% static 'images/question.png' %}" class="header_ico"></a>
+            </li>
+            <li class="topli">
+                <a href="{% url 'logout' %}"><img src="{% static 'images/exit.png' %}" class="header_ico"></a>
+            </li>
+        </ul>
+        {% else %}
+        <div class="logo-auth">
+            <span class="span">Studworld</span>
+        </div>
+        <ul class="topul">
+            <a href="{% url 'login' %}" class="top-log-in sp_href"> log-in</a>
+        </ul>
+    {% endif %}
+    </header>
+    {% if request.user.is_authenticated %}
+    <div class="content">
+        <div class="leftmenu">
+            <ul class="leftul">
+                <li class="leftli">
+                    <a href="{% url 'profile' %}"><img src="{% static 'images/profile.png' %}" class="ico_lmenu"></a>
+                    <a href="#" class="sp_href"><span>profile</span></a>
+                </li>
+                <li class="leftli">
+                    <a href="#"><img src="{% static 'images/group.png' %}" class="ico_lmenu"></a>
+                    <a href="#" class="sp_href"><span>group</span></a>
+                </li>
+                <li class="leftli">
+                    <a href="#"><img src="{% static 'images/university.png' %}" class="ico_lmenu"></a>
+                    <a href="#" class="sp_href"><span>university</span></a>
+                </li>
+            </ul>
+        </div>
+        {% block content %}{% endblock %}
+    </div>
+    {% else %}
+    {% block auth %}{% endblock %}
+    {% endif %}
+<script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
